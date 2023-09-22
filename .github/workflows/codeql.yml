@@ -116,7 +116,7 @@ jobs:
       - name: Analyze code
         uses: github/codeql-action/analyze@v2
         with:
-          queries: ./queries.ql  # Specify the path to your queries.ql file
+          queries: ./.github/workflows/queries.ql  # Specify the path to your queries.ql file
 
       - name: Upload SARIF results
         uses: github/codeql-action/upload-sarif@v2
