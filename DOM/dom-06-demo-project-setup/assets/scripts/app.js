@@ -9,6 +9,8 @@ const backdrop = document.getElementById("backdrop")
 const cancelAddMovie = modal.querySelector(".btn--passive")
 const addConfirm = cancelAddMovie.nextElementSibling;
 const entryText = document.getElementById("entry-text")
+const deleteMovieModal = document.getElementById("delete-modal")
+
 
 const movies = []
 
@@ -16,13 +18,21 @@ function toggleBackdrop(){
   backdrop.classList.toggle(VISIBLE_DISPLAY)
 }
 
-const toggleModal = () =>{
-  modal.classList.toggle(VISIBLE_DISPLAY)
+const closeMovieModal = () =>{
+  modal.classList.remove(VISIBLE_DISPLAY)
+  toggleBackdrop()
+  clearInputs()
+}
+
+const showMovieModal = () =>{
+  modal.classList.add(VISIBLE_DISPLAY)
   toggleBackdrop()
 }
 
 const backdropClickHandler = () =>{
-  toggleModal();
+  closeMovieModal();
+  cancelMovieDeletionModal()
+  clearInputs();
 }
 
 const updateUI = () =>{
@@ -33,13 +43,19 @@ const updateUI = () =>{
   }
 }
 
+const cancelMovieDeletionModal = () =>{
+  toggleBackdrop()
+  deleteMovieModal.classList.remove(VISIBLE_DISPLAY)
+}
+
 const deleteMovieElement = (event) =>{
-  // console.log(event.target.parentNode);
-  // console.log(event.target);
-  // console.log(event.target.parentNode.childNode());
-  //event is getting called on the inner tags of the element hence deleting the parent element which is the one we are creating
-  event.target.parentNode.remove()
-  // event.target.remove()
+  deleteMovieModal.classList.add(VISIBLE_DISPLAY)
+  toggleBackdrop()
+
+  deleteMovieModal.querySelector(".btn--passive").addEventListener("click", cancelMovieDeletionModal)
+  deleteMovieModal.querySelector(".btn--danger").addEventListener("click", () => {
+    event.target.parentNode.remove()
+  })
 }
 
 const renderMovieData = ({title, url, rating}) =>{
@@ -89,14 +105,15 @@ function userInputHandler(){
   movies.push(newMovie)
   console.log(movies);
   clearInputs();
-  toggleModal()
+  closeMovieModal()
+  toggleBackdrop()
   renderMovieData(newMovie);
   updateUI()
 }
 
-addBtn.addEventListener("click", toggleModal)
+addBtn.addEventListener("click", showMovieModal)
 backdrop.addEventListener("click", backdropClickHandler)
-cancelAddMovie.addEventListener("click", toggleModal)
+cancelAddMovie.addEventListener("click", closeMovieModal)
 addConfirm.addEventListener("click", userInputHandler)
 
 // function displayModal(event){
